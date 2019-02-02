@@ -1,0 +1,25 @@
+﻿@model IEnumerable<BlogAppVer5.BdModels.Tag>
+@{
+    ViewData["Title"] = "ShowTags";
+}
+
+<h2>Show Tags</h2>
+@foreach (var tag in Model)
+{
+    @Html.DisplayFor(modelitem => tag.TextTag);
+    <div>
+        <a asp-action="DeleteTag" asp-route-id="@tag.Id"> Delete Tag </a>
+        <a asp-action="LinkTag" asp-route-id="@tag.Id">Link Tag</a>
+
+    </div>
+    <p>
+          Привязанные посты:
+         @foreach(var post in tag.PostTags)
+    {
+             @Html.DisplayFor(PostItem => post.Post.Title);
+    }
+
+    </p>
+   
+
+}
