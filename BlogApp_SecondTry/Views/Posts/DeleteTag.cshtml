@@ -1,0 +1,22 @@
+﻿@using BlogApp_SecondTry.BdModels;
+@model PostTag
+@{
+    ViewData["Title"] = "DeleteTag";
+}
+
+<h4>DeleteTag</h4>
+<p>Are you shure?</p>
+<p>@ViewBag.Tag.TextTag</p>
+
+<form asp-action="DeleteTag">
+    <input type="hidden" value="@ViewBag.Post.Id" name="PostId" />
+    <input type="hidden" value="@ViewBag.Post" name="Post" />
+
+    <input type="hidden" value="@ViewBag.Tag.Id" name="TagId" />
+    <input type="hidden" value="@ViewBag.Tag" name="Tag" />
+
+
+    <input type="submit" value="Delete" class="btn btn-default" /> |
+
+    <a asp-action="Index">Back to List</a>
+</form>

@@ -1,0 +1,27 @@
+﻿@using BlogApp_SecondTry.BdModels;
+@model PostTag
+
+@{
+    ViewData["Title"] = "AddTag";
+}
+
+<h2>AddTag</h2>
+
+<form asp-action="AddTag">
+    <input type="hidden" value="@ViewBag.Post.Id" name="PostId" />
+    <input type="hidden" value="@ViewBag.Post" name="Post" />
+ 
+     <p>
+        "Тэг: "
+    </p>
+    <p>
+        @Html.DropDownListFor(model => model.TagId, ViewBag.Tags as SelectList)
+    </p>
+    <p>
+        <input type="submit" value="Add Tag" />
+    </p>
+</form>
+
+<div>
+    @Html.ActionLink("К списку постов: ", "Index")
+</div>

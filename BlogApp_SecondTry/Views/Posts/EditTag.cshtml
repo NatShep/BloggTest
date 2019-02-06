@@ -1,0 +1,33 @@
+﻿@using BlogApp_SecondTry.BdModels;
+@model Post
+@{
+    ViewData["Title"] = "AddTag";
+}
+
+<h4>@Model.Title contains Tags: </h4>
+
+<table class="nav-tabs">
+
+    <tbody>
+        @foreach (var item in Model.PostTags)
+        {
+        <tr>
+            <td>
+                <p>@Html.DisplayFor(modelitem => item.Tag.TextTag) </p>
+            </td>
+
+            <td>
+                <a asp-action="DeleteTag" asp-route-tagid="@item.Tag.Id" asp-route-postid="@Model.Id">Delete Tag</a>
+            </td>
+
+        </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<p> 
+    <a asp-action="AddTag" asp-route-id=@Model.Id>Add Tag</a> |
+    <a asp-action="Index">Back to List</a> 
+</p>
