@@ -67,6 +67,7 @@ namespace BlogApp_SecondTry.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Date = DateTime.Now;   //!!! cделать так, чтобы время бралось с внешнего сервака! 
             return View(post);
         }
 

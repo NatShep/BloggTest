@@ -12225,11 +12225,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Apps\\BlogApp\\BlogApp_SecondTry\\BlogApp_SecondTry\\BlogApp_SecondTry.csproj",
+      "projectUniqueName": "D:\\Проекты\\Программирование\\Git\\TestBlog\\BlogApp_SecondTry\\BlogApp_SecondTry.csproj",
       "projectName": "BlogApp_SecondTry",
-      "projectPath": "D:\\Apps\\BlogApp\\BlogApp_SecondTry\\BlogApp_SecondTry\\BlogApp_SecondTry.csproj",
+      "projectPath": "D:\\Проекты\\Программирование\\Git\\TestBlog\\BlogApp_SecondTry\\BlogApp_SecondTry.csproj",
       "packagesPath": "C:\\Users\\Наташа\\.nuget\\packages\\",
-      "outputPath": "D:\\Apps\\BlogApp\\BlogApp_SecondTry\\BlogApp_SecondTry\\obj\\",
+      "outputPath": "D:\\Проекты\\Программирование\\Git\\TestBlog\\BlogApp_SecondTry\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -1,7 +1,35 @@
-﻿
+﻿@model IEnumerable<BlogApp_SecondTry.BdModels.Post>
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2> Фронталка </h2>
 
+
+
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Getting started</h2>
+            <p>.............</p>
+        </div>
+        <div class="col-md-9">
+            @foreach (var item in Model)
+            {
+                <h2 style=" margin-bottom: 0px; ">@item.Title</h2>
+                <p style="font-size: 80%"><i>@item.CreateTime.ToShortDateString()</i></p>
+                <p></p>
+                <p>
+                    @item.Description ...
+                    <a asp-action="PostDetails" asp-route-id="@item.Id">Читать...</a>
+                </p>
+                <p>
+                @foreach (var posttag in item.PostTags)
+                {
+                  <i style="font-size: 80%">
+                    <a asp-action="PostTag" asp-route-id="@item.Id">@posttag.Tag.TextTag</a> |
+                  </i>  
+                }
+                </p>  
+                <hr />
+             } 
+        </div>
+    </div>
