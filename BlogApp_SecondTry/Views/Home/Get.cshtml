@@ -19,7 +19,7 @@
                 <p></p>
                 <p>
                     @item.Description ...
-                    <a asp-action="PostDetails" asp-route-id="@item.Id">Читать...</a>
+                    <a asp-action="GetDetails" asp-route-id="@item.Id">Читать...</a>
                 </p>
                 <p>
                 @foreach (var posttag in item.PostTags)
