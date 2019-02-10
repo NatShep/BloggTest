@@ -1,3 +1,47 @@
+# visual studio
+bin/
+obj/
+TestResults/
+Debug/
+Release/
+packages/
+*.suo
+*.dll
+*.pdb
+*.user
+*.vsmdi
+*.ncb
+*.sln.cache
+*.sln.ide
+.vs/
+*.dbmdl
+*.rdl.data
+
+# resharper
+_resharper.*/
+
+# delphi
+*.dcu
+
+*.dotCover
+*.DotSettings.user
+
+# ��������� ����� �������� Git Extensions (������������� �������� ��� ��������� ��������)
+GitExtensions.settings.backup
+
+
+#���� ������� � ����������� �� ����� csv ����
+Resources/Translation/resources_new.csv
+BuildScripts/resgen/*.log
+BuildScripts/*.log
+
+.idea
+.idea/*
+node_modules
+wiremock-standalone-2.1.12.jar
+.DS_Store
+
+
 #angular ide
 *.project
 .settings/
@@ -41,17 +85,4 @@ Thumbs.db
 Desktop.ini
 .DS_Store
  No newline at end of file
-/src/.tools
-/src/.idea/.idea.Service.Offliner/.idea/indexLayout.xml
-/src/.idea/.idea.Service.Offliner/.idea/vcs.xml
-src/Service.PosSettings.Host/app/web.config
-src/Service.PosSettings.Host/app/Service.PosSettings.Host.runtimeconfig.json
-src/Service.PosSettings.Host/app/Service.PosSettings.Host.pdb
-src/Service.PosSettings.Host/app/Service.PosSettings.Host.dll
-src/Service.PosSettings.Host/app/Service.PosSettings.Host.deps.json
-src/Service.PosSettings.Host/app/appsettings.json
-src/Service.PosSettings.Host/app/appsettings.Development.json
-src/.idea/.idea.Service.PosSettings/.idea/misc.xml
-src/.idea/.idea.Service.PosSettings/.idea/indexLayout.xml
-src/.idea/.idea.Service.PosSettings/.idea/encodings.xml
-src/.idea/.idea.Service.PosSettings/.idea/.name
+
