@@ -1,0 +1,57 @@
+#angular ide
+*.project
+.settings/
+
+#npm
+node_modules/
+
+# Common IntelliJ Platform excludes
+
+# User specific
+**/.idea/**/workspace.xml
+**/.idea/**/tasks.xml
+**/.idea/shelf/*
+**/.idea/dictionaries
+
+# Sensitive or high-churn files
+**/.idea/**/dataSources/
+**/.idea/**/dataSources.ids
+**/.idea/**/dataSources.xml
+**/.idea/**/dataSources.local.xml
+**/.idea/**/sqlDataSources.xml
+**/.idea/**/dynamic.xml
+
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
+
+
+*.suo
+*.user
+.vs/
+[Bb]in/
+[Oo]bj/
+_UpgradeReport_Files/
+[Pp]ackages/
+
+Thumbs.db
+Desktop.ini
+.DS_Store
+ No newline at end of file
+/src/.tools
+/src/.idea/.idea.Service.Offliner/.idea/indexLayout.xml
+/src/.idea/.idea.Service.Offliner/.idea/vcs.xml
+src/Service.PosSettings.Host/app/web.config
+src/Service.PosSettings.Host/app/Service.PosSettings.Host.runtimeconfig.json
+src/Service.PosSettings.Host/app/Service.PosSettings.Host.pdb
+src/Service.PosSettings.Host/app/Service.PosSettings.Host.dll
+src/Service.PosSettings.Host/app/Service.PosSettings.Host.deps.json
+src/Service.PosSettings.Host/app/appsettings.json
+src/Service.PosSettings.Host/app/appsettings.Development.json
+src/.idea/.idea.Service.PosSettings/.idea/misc.xml
+src/.idea/.idea.Service.PosSettings/.idea/indexLayout.xml
+src/.idea/.idea.Service.PosSettings/.idea/encodings.xml
+src/.idea/.idea.Service.PosSettings/.idea/.name
