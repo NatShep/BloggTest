@@ -6,47 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogApp_SecondTry.BdModels;
+using BlogApp_SecondTry.Services;
 
 namespace BlogApp_SecondTry.Controllers
 {
     public class PostsController : Controller
     {
-        // Index
-        // Create
-        // Details
-        // Edit
-        // Delete
-        // EditTag(for Post)
-        // AddTag(for Post)
-        // DeleteTagfor Post)
+        private readonly PostService _postService;
+        private readonly TagService _tagService;
 
-        private readonly BlogContext db;
 
-        public PostsController(BlogContext context)
+        public PostsController(PostService postService, TagService tagService)
         {
-            db = context;
+            _postService = postService;
+            _tagService = tagService;
         }
 
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            return View(await db.Posts.ToListAsync());
+            return View(await _postService.GetAllWithTags(showHidden:true));
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var post = await db.Posts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var post = await _postService.GetOrNullBy(id);
             if (post == null)
-            {
                 return NotFound();
-            }
 
             return View(post);
         }
@@ -54,8 +41,11 @@ namespace BlogApp_SecondTry.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
+            ViewBag.Date = DateTime.Now;   //!!! cделать так, чтобы время бралось с внешнего сервака
             return View();
+            
         }
+
         // POST: Posts/Create        
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -63,27 +53,20 @@ namespace BlogApp_SecondTry.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Add(post);
-                await db.SaveChangesAsync();
+
+                await _postService.Add(post);    
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Date = DateTime.Now;   //!!! cделать так, чтобы время бралось с внешнего сервака! 
+
             return View(post);
         }
 
-        // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPut]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var post = await db.Posts.FindAsync(id);
+            var post =  await _postService.GetOrNullBy(id);
             if (post == null)
-            {
                 return NotFound();
-            }
             return View(post);
         }
         // POST: Posts/Edit/5
@@ -92,49 +75,26 @@ namespace BlogApp_SecondTry.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CreateTime,Body,Published")] Post post)
         {
             if (id != post.Id)
-            {
+                return UnprocessableEntity();
+            
+            if (!ModelState.IsValid) 
+                return View(post);
+            if (!_postService.IsPostExists(post.Id))
                 return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    db.Update(post);
-                    await db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PostExists(post.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
+            
+            await _postService.Update(post);
+            
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var post = await db.Posts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var post = await _postService.GetOrNullBy(id);
             if (post == null)
-            {
                 return NotFound();
-            }
-
-            return View(post);
+            else    
+                return View(post);
         }
 
         // POST: Posts/Delete/5
@@ -142,52 +102,31 @@ namespace BlogApp_SecondTry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var post = await db.Posts.FindAsync(id);
-            db.Posts.Remove(post);
-            await db.SaveChangesAsync();
+            await _postService.RemoveBy(id);
             return RedirectToAction(nameof(Index));
         }
 
         // GET: Posts/EditTag/5
         [HttpGet]
-        public async Task<IActionResult> EditTag(int? id)
+        public async Task<IActionResult> EditTag(int postId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-         
-            var post = await db.Posts.Include(pt => pt.PostTags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == id);
-
+            var post = await _postService.GetOrNullWithTagsBy(postId); 
             if (post == null)
-            {
                 return NotFound();
-            }
 
             return View(post);
         }
 
-        // GET: Posts/AddTag/5
-        [HttpGet]
-        public async Task<IActionResult> AddTag(int? id)
+        [HttpGet("GetAllowed/{postId}")]
+        public async Task<IActionResult> GetAllowedTags(int postId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var post = await db.Posts
-                .Include(pt => pt.PostTags)
-                .ThenInclude(t => t.Tag)
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var post = await _postService.GetOrNullWithTagsBy(postId);
 
             if (post == null)
-            {
-
                 return NotFound();
-            }
 
-            List<Tag> tags = await db.Tags.ToListAsync();
+            var tags = await _tagService.GetAll();
+            
             ViewBag.Tags = new SelectList(tags, "Id", "TextTag");
             ViewBag.Post = post;
 
@@ -196,74 +135,35 @@ namespace BlogApp_SecondTry.Controllers
         // Post: Posts/AddTag/5
         [HttpPost]
         public async Task<IActionResult> AddTag(PostTag postTag)  //!!!! почему тут приходит значения только для Id, для самих Post и Tag - значение -Null. Но все выходит ок
-        {         
-            var post = await db.Posts
-                .Include(pt => pt.PostTags)
-                .ThenInclude(t => t.Tag)
-                .FirstOrDefaultAsync(p => p.Id == postTag.PostId); 
+        {
+            var post = await _postService.GetOrNullWithTagsBy(postTag);
 
-            if (TagExists(post,postTag.TagId))
+            if (_postService.IsPostExists(post.Id))
                  return RedirectToAction(nameof(Index));
 
-            post.PostTags.Add(postTag); // эта команда добавляет в таблицу PostTag, и в таблицу tag. несмотря на то, что в полученном postTage нет значения Post И Tag 
-            db.SaveChanges();
+            await _postService.AddTagToPost(post, postTag.TagId);
             return RedirectToAction(nameof(Index));
         }
         // GET: Posts/DeleteTag/
-        public async Task<IActionResult> DeleteTag(int? tagId, int? postId)
+        public async Task<IActionResult> DeleteTag(int tagId, int postId)
         {
-            if (tagId == null)
-            {
-                return NotFound();
-            }
-
-            Tag tag = await db.Tags.FirstOrDefaultAsync(t => t.Id == tagId);
-            Post post = await db.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-
+            var tag = await _tagService.GetOrNullBy(tagId);
             if (tag==null)
                 return NotFound();
 
-            ViewBag.post = post;
+            ViewBag.post = await _postService.GetOrNullBy(postId);;
             ViewBag.tag = tag;
+            
             return View();
         }
         // POST: Posts/DeleteTag/
         [HttpPost, ActionName("DeleteTag")]
-        public async Task<IActionResult> DeleteTagConfirmed(PostTag postTag) //!!!! почему тут приходит значения только для Id, для самих Post и Tag - значение -Null. Но тут не выходжит ок. 
-            // Он не удаляет так просто postTag. Нужно найти имеющийся в базе.
+        public async Task<IActionResult> DeleteTagConfirmed(PostTag postTag) 
         {
-            var post = await db.Posts
-                .Include(pt => pt.PostTags)
-                .ThenInclude(t => t.Tag)
-                .FirstOrDefaultAsync(p => p.Id == postTag.PostId);
-
-            if (!TagExists(post, postTag.TagId))
-                return RedirectToAction(nameof(Index));
-
-            PostTag deletedPostTag = post.PostTags.FirstOrDefault(pt => pt.TagId == postTag.TagId);
-
-            post.PostTags.Remove(deletedPostTag);
-            await db.SaveChangesAsync();
-
+            await _postService.RemoveTagFromPost(
+                postId: postTag.PostId, 
+                tagId:  postTag.TagId);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PostExists(int id)
-        {
-            return db.Posts.Any(e => e.Id == id);
-        }
-
-        private bool TagExists(Post post, int id)
-        {
-            //!!! так как не указывали наличие базы PostTag в BlogContext(кстати, почему? так везде говорят делать), то я и не могу обратиться к ней с вопросом о наличии. Приходится делать так:
-            bool Exist = false;
-            foreach (PostTag postTag in post.PostTags)
-            {
-                Exist = (postTag.TagId ==id);
-                if (Exist) return Exist;
-            }
-            return Exist;            
-            //!!!!  как то это можно через sql и Where?
         }
     }
 }

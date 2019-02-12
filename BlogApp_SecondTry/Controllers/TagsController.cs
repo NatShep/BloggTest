@@ -6,58 +6,46 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogApp_SecondTry.BdModels;
+using BlogApp_SecondTry.Services;
 
 namespace BlogApp_SecondTry.Controllers
 {
     public class TagsController : Controller
     {
-        private readonly BlogContext _context;
+        private readonly TagService _tagService;
 
-        public TagsController(BlogContext context)
+        
+        public TagsController(TagService tagService)
         {
-            _context = context;
+            _tagService = tagService;
         }
+       
+        public async Task<IActionResult> Index() 
+            => View(await _tagService.GetAllWithTags() );
 
-        // GET: Tags
-        public async Task<IActionResult> Index()
-        {
-            
-            return View(await _context.Tags.Include(pt => pt.PostTags).ThenInclude(p => p.Post).ToListAsync());
-        }          
 
-        // GET: Tags/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() 
+            => View();
 
-        // POST: Tags/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,TextTag")] Tag tag)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tag);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tag);
+            if (!ModelState.IsValid) 
+                return View(tag);
+            
+            await _tagService.Add(tag);
+            return RedirectToAction(nameof(Index));
         }               
-        // GET: Tags/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var tag = await _tagService.GetOrNullBy(id);
 
-            var tag = await _context.Tags
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
-            {
                 return NotFound();
-            }
 
             return View(tag);
         }
@@ -67,15 +55,8 @@ namespace BlogApp_SecondTry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tag = await _context.Tags.FindAsync(id);
-            _context.Tags.Remove(tag);
-            await _context.SaveChangesAsync();
+            await _tagService.Remove(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TagExists(int id)
-        {
-            return _context.Tags.Any(e => e.Id == id);
         }
     }
 }

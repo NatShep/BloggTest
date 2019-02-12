@@ -1,0 +1,88 @@
+# visual studio
+bin/
+obj/
+TestResults/
+Debug/
+Release/
+packages/
+*.suo
+*.dll
+*.pdb
+*.user
+*.vsmdi
+*.ncb
+*.sln.cache
+*.sln.ide
+.vs/
+*.dbmdl
+*.rdl.data
+
+# resharper
+_resharper.*/
+
+# delphi
+*.dcu
+
+*.dotCover
+*.DotSettings.user
+
+# ��������� ����� �������� Git Extensions (������������� �������� ��� ��������� ��������)
+GitExtensions.settings.backup
+
+
+#���� ������� � ����������� �� ����� csv ����
+Resources/Translation/resources_new.csv
+BuildScripts/resgen/*.log
+BuildScripts/*.log
+
+.idea
+.idea/*
+node_modules
+wiremock-standalone-2.1.12.jar
+.DS_Store
+
+
+#angular ide
+*.project
+.settings/
+
+#npm
+node_modules/
+
+# Common IntelliJ Platform excludes
+
+# User specific
+**/.idea/**/workspace.xml
+**/.idea/**/tasks.xml
+**/.idea/shelf/*
+**/.idea/dictionaries
+
+# Sensitive or high-churn files
+**/.idea/**/dataSources/
+**/.idea/**/dataSources.ids
+**/.idea/**/dataSources.xml
+**/.idea/**/dataSources.local.xml
+**/.idea/**/sqlDataSources.xml
+**/.idea/**/dynamic.xml
+
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
+
+
+*.suo
+*.user
+.vs/
+[Bb]in/
+[Oo]bj/
+_UpgradeReport_Files/
+[Pp]ackages/
+
+Thumbs.db
+Desktop.ini
+.DS_Store
+ No newline at end of file
+

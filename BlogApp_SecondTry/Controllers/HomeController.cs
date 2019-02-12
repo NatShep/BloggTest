@@ -6,41 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogApp_SecondTry.BdModels;
+using BlogApp_SecondTry.Services;
 
 namespace BlogApp_SecondTry.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly BlogContext db;
+        private readonly PostService _postService;
 
-        public HomeController(BlogContext context)
+        public HomeController(PostService postService)
         {
-            db = context;
+            _postService = postService;
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Get(int? tagId)
         {
-            List<Post> posts;
-            if (id == null)
-            {
-                posts = await db.Posts.Include(pt => pt.PostTags).ThenInclude(t => t.Tag).Where(p => p.Published).ToListAsync();
-            }
-            else
-                posts = await db.Posts.Include(pt => pt.PostTags).ThenInclude(t => t.Tag).Where(p => p.Published).ToListAsync();   //!!!!! как сделать выборку по ид тэгов
-
-            return View(posts);
+            var query = await _postService.GetAllWithTags(showHidden:false,tagId:tagId);
+         
+            return View(query);
         }      
 
-        public async Task<IActionResult> PostDetails(int? id)
-        {
+        public async Task<IActionResult> GetDetails(int postId) 
+            => View(await _postService.GetOrNullWithTagsBy(postId));
 
-            return View(await db.Posts.ToListAsync());
-        }
-
-        public IActionResult PostTag(int? id)
-        {
-            return RedirectToAction("Index", "Home"); //!!!! сдtелать вывод по id  { "Square", "Home", id}
-        }
     }
 }
